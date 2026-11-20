@@ -12,6 +12,7 @@ public class PlayerBehaviour : MonoBehaviour
     public bool interactable;
     public Rigidbody2D playerRigidbody;
     public SpriteRenderer playerSpriteRenderer;
+    public Animator playerAnimator;
     public Image hitPointOne;
     public Image hitPointTwo;
     public Image hitPointThree;
@@ -39,12 +40,17 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 transform.Translate(Vector3.right * playerSpeed * Time.deltaTime);
                 playerSpriteRenderer.flipX = false;
+                playerAnimator.SetBool("isWalking", true);
             }
-        
-            if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A))
             {
                 transform.Translate(Vector3.left * playerSpeed * Time.deltaTime);
                 playerSpriteRenderer.flipX = true;
+                playerAnimator.SetBool("isWalking", true);
+            }
+            else
+            {
+                playerAnimator.SetBool("isWalking", false);
             }
         
             if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -99,7 +105,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void PlayerDeath()
     {
-        
+        playerAnimator.SetBool("isDead", true);
+        interacting = true;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
